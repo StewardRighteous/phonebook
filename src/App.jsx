@@ -8,7 +8,11 @@ const App = () => {
 
   const addNewName = (e) => {
     e.preventDefault();
-    setPhoneBook(phoneBook.concat({ name: newName }));
+    const existingNames = phoneBook.map((detail) => detail.name);
+    existingNames.includes(newName)
+      ? alert(`${newName} is already added to phonebook`)
+      : setPhoneBook(phoneBook.concat({ name: newName }));
+    setNewName("");
   };
 
   return (
