@@ -19,6 +19,12 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": "4"
+    },
+    {
+      "name": "Ramadan Gan",
+      "number": "157789999555",
+      "id": "Ck11Wtx3bOs"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }

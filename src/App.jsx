@@ -23,11 +23,18 @@ const App = () => {
   const addNewName = (e) => {
     e.preventDefault();
     const existingNames = phoneBook.map((detail) => detail.name);
-    existingNames.includes(newName)
-      ? alert(`${newName} is already added to phonebook`)
-      : setPhoneBook(phoneBook.concat({ name: newName, number: newNumber }));
-    setNewName("");
-    setNewNumber("");
+    if (existingNames.includes(newName)) {
+      alert(`${newName} is already added to phonebook`);
+    } else {
+      axios
+        .post("http://localhost:3001/persons", {
+          name: newName,
+          number: newNumber,
+        })
+        .then((resp) => setPhoneBook(phoneBook.concat(resp.data)));
+      setNewName("");
+      setNewNumber("");
+    }
   };
 
   const namesToShow =
