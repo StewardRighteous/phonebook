@@ -20,11 +20,33 @@ const App = () => {
   const handleNewNumberChange = (e) => setNewNumber(e.target.value);
   const handleNewNameChange = (e) => setNewName(e.target.value);
 
+  const updateNumber = (existingName) => {
+    const confirmation = confirm(
+      `${existingName} already exists! Do you want to change the number ?`,
+    );
+    if (!confirmation) {
+      setNewName("");
+      setNewNumber("");
+    } else {
+      const oldNumber = phoneBook.find((n) => n.name === existingName);
+      const updateNumber = { ...oldNumber, number: newNumber };
+      personsService
+        .updateNumber(updateNumber.id, updateNumber)
+        .then((returnedPerson) =>
+          phoneBook.map((n) =>
+            n.id === returnedPerson.id ? returnedPerson : n,
+          ),
+        );
+      setNewName("");
+      setNewNumber("");
+    }
+  };
+
   const addNewName = (e) => {
     e.preventDefault();
     const existingNames = phoneBook.map((detail) => detail.name);
     if (existingNames.includes(newName)) {
-      alert(`${newName} is already added to phonebook`);
+      updateNumber(newName);
     } else {
       personsService
         .createNew({
@@ -40,11 +62,11 @@ const App = () => {
   };
 
   const deletePerson = (detail) => {
-    const confirmation = confirm(` Delete ${detail.name} `)
-    if(confirmation){
+    const confirmation = confirm(` Delete ${detail.name} `);
+    if (confirmation) {
       personsService.deletePerson(detail.id);
     }
-  }
+  };
 
   const namesToShow =
     search.trim() === ""
