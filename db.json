@@ -24,6 +24,11 @@
       "name": "Ramadan Gan",
       "number": "157789999555",
       "id": "Ck11Wtx3bOs"
+    },
+    {
+      "name": "Bucky ",
+      "number": "55564777",
+      "id": "Kbo2hKp4upM"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
