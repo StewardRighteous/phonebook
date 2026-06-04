@@ -39,6 +39,13 @@ const App = () => {
     }
   };
 
+  const deletePerson = (detail) => {
+    const confirmation = confirm(` Delete ${detail.name} `)
+    if(confirmation){
+      personsService.deletePerson(detail.id);
+    }
+  }
+
   const namesToShow =
     search.trim() === ""
       ? phoneBook
@@ -59,7 +66,7 @@ const App = () => {
         newNumber={newNumber}
       />
       <h2>Numbers</h2>
-      <Persons names={namesToShow} />
+      <Persons names={namesToShow} handleDeletePerson={deletePerson} />
     </div>
   );
 };
