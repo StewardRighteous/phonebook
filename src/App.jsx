@@ -37,21 +37,32 @@ const App = () => {
       const updateNumber = { ...oldNumber, number: newNumber };
       personsService
         .updateNumber(updateNumber.id, updateNumber)
-        .then((returnedPerson) =>
+        .then((returnedPerson) => {
           phoneBook.map((n) =>
             n.id === returnedPerson.id ? returnedPerson : n,
-          ),
-        );
+          );
+          setNotification({
+            message: `${existingName}'s Number Updated Successfully`,
+            isError: false,
+          });
+          setTimeout(
+            () => setNotification({ message: null, isError: false }),
+            2000,
+          );
+        })
+        .catch(() => {
+          setNotification({
+            message: `${existingName} is Already Deleted`,
+            isError: true,
+          });
+          setPhoneBook(phoneBook.filter((n) => n.name !== existingName));
+          setTimeout(
+            () => setNotification({ message: null, isError: false }),
+            2000,
+          );
+        });
       setNewName("");
       setNewNumber("");
-      setNotification({
-        message: `${existingName}'s Number Updated Successfully`,
-        isError: false,
-      });
-      setTimeout(
-        () => setNotification({ message: null, isError: false }),
-        2000,
-      );
     }
   };
 
