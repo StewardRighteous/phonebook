@@ -19,7 +19,7 @@ const App = () => {
     personsService.getAll().then((initialPersons) => {
       setPhoneBook(initialPersons);
     });
-  });
+  }, []);
 
   const handleSearchChange = (e) => setSearch(e.target.value);
   const handleNewNumberChange = (e) => setNewNumber(e.target.value);
