@@ -97,6 +97,7 @@ const App = () => {
     const confirmation = confirm(` Delete ${detail.name} `);
     if (confirmation) {
       personsService.deletePerson(detail.id);
+      setPhoneBook([...phoneBook].filter(p => p.name !== detail.name))
       setNotification({
         message: `${detail.name} is Deleted Successfully`,
         isError: false,
