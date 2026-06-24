@@ -38,11 +38,13 @@ const App = () => {
       personsService
         .updateNumber(updateNumber.id, updateNumber)
         .then((returnedPerson) => {
-          phoneBook.map((n) =>
-            n.id === returnedPerson.id ? returnedPerson : n,
+          setPhoneBook(
+            phoneBook.map((n) =>
+              n.id === returnedPerson.id ? returnedPerson : n,
+            ),
           );
           setNotification({
-            message: `${existingName}'s Number Updated Successfully`,
+            message: `${returnedPerson.name}'s Number Updated Successfully`,
             isError: false,
           });
           setTimeout(
@@ -97,7 +99,7 @@ const App = () => {
     const confirmation = confirm(` Delete ${detail.name} `);
     if (confirmation) {
       personsService.deletePerson(detail.id);
-      setPhoneBook([...phoneBook].filter(p => p.name !== detail.name))
+      setPhoneBook([...phoneBook].filter((p) => p.name !== detail.name));
       setNotification({
         message: `${detail.name} is Deleted Successfully`,
         isError: false,
