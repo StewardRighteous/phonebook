@@ -25,6 +25,14 @@ const App = () => {
   const handleNewNumberChange = (e) => setNewNumber(e.target.value);
   const handleNewNameChange = (e) => setNewName(e.target.value);
 
+  const notify = (notificationMessage, isAError = false) => {
+    setNotification({
+      message: notificationMessage,
+      isError: isAError,
+    });
+    setTimeout(() => setNotification({ message: null, isError: false }), 2000);
+  };
+
   const updateNumber = (existingName) => {
     const confirmation = confirm(
       `${existingName} already exists! Do you want to change the number ?`,
@@ -43,24 +51,13 @@ const App = () => {
               n.id === returnedPerson.id ? returnedPerson : n,
             ),
           );
-          setNotification({
-            message: `${returnedPerson.name}'s Number Updated Successfully`,
-            isError: false,
-          });
-          setTimeout(
-            () => setNotification({ message: null, isError: false }),
-            2000,
-          );
+          notify(`${returnedPerson.name}'s Number Updated Successfully`);
         })
-        .catch(() => {
-          setNotification({
-            message: `${existingName} is Already Deleted`,
-            isError: true,
-          });
+        .catch((err) => {
           setPhoneBook(phoneBook.filter((n) => n.name !== existingName));
-          setTimeout(
-            () => setNotification({ message: null, isError: false }),
-            2000,
+          notify(
+            err.response.data.error || `${existingName} is Already Deleted`,
+            true,
           );
         });
       setNewName("");
@@ -79,19 +76,15 @@ const App = () => {
           name: newName,
           number: newNumber,
         })
-        .then((returnedPerson) =>
-          setPhoneBook(phoneBook.concat(returnedPerson)),
-        );
-      setNewName("");
-      setNewNumber("");
-      setNotification({
-        message: "New User is Created Successfully",
-        isError: false,
-      });
-      setTimeout(
-        () => setNotification({ message: null, isError: false }),
-        2000,
-      );
+        .then((returnedPerson) => {
+          setPhoneBook(phoneBook.concat(returnedPerson));
+          setNewName("");
+          setNewNumber("");
+          notify("New User is Created Successfully");
+        })
+        .catch((error) => {
+          notify(error.response.data.error, true);
+        });
     }
   };
 
@@ -100,14 +93,7 @@ const App = () => {
     if (confirmation) {
       personsService.deletePerson(detail.id);
       setPhoneBook([...phoneBook].filter((p) => p.name !== detail.name));
-      setNotification({
-        message: `${detail.name} is Deleted Successfully`,
-        isError: false,
-      });
-      setTimeout(
-        () => setNotification({ message: null, isError: false }),
-        2000,
-      );
+      notify(`${detail.name} is Deleted Successfully`);
     }
   };
 
